@@ -1,0 +1,70 @@
+﻿@model Sudoku.Models.ViewModels.PlaySudokuVM
+
+@{
+    ViewBag.Title = "PlaySudoku";
+}
+
+<input id="board-id" type="hidden" value="@Model.Id" />
+
+@if (Model.UserIsAuthenticated)
+{
+    <div id="vote">
+        @for (int i = 1; i <= 5; i++)
+        {
+            string buttonChecked = (Model.CurrentUserRating == i) ? "checked" : ""; 
+            <span>@i:</span><input type="radio" name="vote-btn" value="@i" @buttonChecked />   
+        }
+    </div>
+}
+<div id="rating">
+    Rating:
+    <span id="total-rating">@Model.GetSimpleRating()</span>
+    <span>of 5</span>
+</div>
+
+<div id="wrapper">
+    @for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            <div class="grid-3by3">
+            @for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 3; col++)
+                {
+                    int r = i * 3 + row;
+                    int c = j * 3 + col;
+
+                    string htmlClass = "square";
+                    if (char.IsWhiteSpace(Model.Board[r, c]))
+                    {
+                        htmlClass += " modifiable";
+                    }
+                    
+                    <div class="@htmlClass" data-row="@r" data-col="@c">
+                        <div class="square-content">
+                            @Model.Board[r, c]
+                        </div> 
+                    </div>
+                }
+            }
+            </div>
+        }
+    }
+</div>
+<div id="controls">
+    <label for="show-initial-values">Mark initial values:</label>
+    <input type="checkbox" id="show-initial-values"/>
+    <div>
+        <button id="send-btn" data-game-id="@Model.Id">Send</button>
+    </div>
+</div>
+<div id="messages" class="hidden">
+    <p id="message"></p>
+    <button id="hide-btn">Hide</button>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/Sudoku/sudoku.js"></script>
+    <script src="~/Scripts/Sudoku/boardRating.js"></script>
+}

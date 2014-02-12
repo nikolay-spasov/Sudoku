@@ -1,0 +1,14 @@
+﻿@model List<Sudoku.Models.ViewModels.IndexVM>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div id="games" class="clear-fix">
+    @Html.Partial("_Games", Model)
+</div>
+
+<button id="load-more-btn">Load 10 more</button>
+
+@section Scripts {
+    <script src="~/Scripts/Sudoku/gameList.js"></script>
+}

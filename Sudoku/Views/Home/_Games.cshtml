@@ -1,0 +1,7 @@
+﻿@model List<Sudoku.Models.ViewModels.IndexVM>
+
+@foreach (var game in Model)
+{
+    Html.RenderPartial("_GamePreview", game);
+}
+
