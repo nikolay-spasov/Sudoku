@@ -9,7 +9,7 @@ namespace Sudoku.Models.ViewModels
     {
         public int Id { get; set; }
         public char[,] Board { get; set; }
-        public bool UserIsAuthenticated { get; set; }
+        public char[,] InitialBoard { get; set; }
         public double AverageRating { get; set; }
         public int CurrentUserRating { get; set; }
 

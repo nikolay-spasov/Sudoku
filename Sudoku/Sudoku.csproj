@@ -185,6 +185,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -200,18 +201,38 @@
     <Compile Include="Migrations\201402050928078_addedRatings.Designer.cs">
       <DependentUpon>201402050928078_addedRatings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201402130953329_addedSaveGame.cs" />
+    <Compile Include="Migrations\201402130953329_addedSaveGame.Designer.cs">
+      <DependentUpon>201402130953329_addedSaveGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402131009208_addedExplicitForeignKeyToSavedGame.cs" />
+    <Compile Include="Migrations\201402131009208_addedExplicitForeignKeyToSavedGame.Designer.cs">
+      <DependentUpon>201402131009208_addedExplicitForeignKeyToSavedGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402131013274_addedExplicitForeignKeyToUserProfile.cs" />
+    <Compile Include="Migrations\201402131013274_addedExplicitForeignKeyToUserProfile.Designer.cs">
+      <DependentUpon>201402131013274_addedExplicitForeignKeyToUserProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402131038483_fixedUserProfileSavedGamesRelationship.cs" />
+    <Compile Include="Migrations\201402131038483_fixedUserProfileSavedGamesRelationship.Designer.cs">
+      <DependentUpon>201402131038483_fixedUserProfileSavedGamesRelationship.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\Rating.cs" />
+    <Compile Include="Models\SavedGame.cs" />
     <Compile Include="Models\SudokuDbContext.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Models\ViewModels\IndexVM.cs" />
     <Compile Include="Models\ViewModels\PlaySudokuVM.cs" />
     <Compile Include="Models\ViewModels\RateBoardVM.cs" />
+    <Compile Include="Models\ViewModels\SaveGameVM.cs" />
+    <Compile Include="Models\ViewModels\ShowSavedGamesVM.cs" />
     <Compile Include="Models\ViewModels\SubmitSolutionVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Workers\SudokuSolutionVerifier.cs" />
+    <Compile Include="Validation\BoardValidationAttribute.cs" />
+    <Compile Include="SudokuLogic\SudokuSolutionVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\50easy.txt" />
@@ -285,6 +306,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Sudoku\boardRating.js" />
     <Content Include="Scripts\Sudoku\gameList.js" />
+    <Content Include="Scripts\Sudoku\loadGame.js" />
     <Content Include="Scripts\Sudoku\sudoku.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -327,10 +349,10 @@
     <Content Include="Views\Home\_BoardRating.cshtml" />
     <Content Include="Views\Home\_GamePreview.cshtml" />
     <Content Include="Views\Home\_Games.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\_BoardPreview.cshtml" />
+    <Content Include="Views\User\ShowSavedGames.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Filters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -343,6 +365,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201402050928078_addedRatings.resx">
       <DependentUpon>201402050928078_addedRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402130953329_addedSaveGame.resx">
+      <DependentUpon>201402130953329_addedSaveGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402131009208_addedExplicitForeignKeyToSavedGame.resx">
+      <DependentUpon>201402131009208_addedExplicitForeignKeyToSavedGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402131013274_addedExplicitForeignKeyToUserProfile.resx">
+      <DependentUpon>201402131013274_addedExplicitForeignKeyToUserProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402131038483_fixedUserProfileSavedGamesRelationship.resx">
+      <DependentUpon>201402131038483_fixedUserProfileSavedGamesRelationship.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

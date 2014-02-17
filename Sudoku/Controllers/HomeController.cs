@@ -1,6 +1,6 @@
 ﻿using Sudoku.Models;
 using Sudoku.Models.ViewModels;
-using Sudoku.Workers;
+using Sudoku.SudokuLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,33 +12,67 @@ namespace Sudoku.Controllers
 {
     public class HomeController : Controller
     {
-        // TODO: Make it DI friendly
         private SudokuDbContext db = new SudokuDbContext();
 
-        public ActionResult Index()
+        public ActionResult Index(string difficulty = "All")
         {
-            var games = GetGames(0, 12);
+            var games = GetGames(0, 12, difficulty);
+
+            List<SelectListItem> diffList = new List<SelectListItem>
+            {
+               new SelectListItem
+               {
+                   Text = "All",
+                   Value = "All",
+                   Selected = difficulty == "All"
+               }
+            };
+            Enum.GetNames(typeof(Difficulty)).ToList().ForEach(x =>
+                {
+                    diffList.Add(new SelectListItem
+                    {
+                        Text = x,
+                        Value = x,
+                        Selected = difficulty == x
+                    });
+                });
+
+            TempData["DifficultyList"] = diffList;
 
             return View(games);
         }
 
         [HttpPost]
-        public ActionResult GetMoreGames(int skip, int take)
+        public ActionResult GetMoreGames(int skip, int take, string difficulty = "All")
         {
-            var games = GetGames(skip, take);
+            var games = GetGames(skip, take, difficulty);
 
             return PartialView("_Games", games);
         }
 
-        private List<IndexVM> GetGames(int skip, int take)
+        private List<IndexVM> GetGames(int skip, int take, string difficulty)
         {
-            var games = db.Boards.Include("Rated")
-                .OrderBy(x => x.Id)
-                .Skip(skip)
-                .Take(take)
-                .ToList();
+            List<Board> games = new List<Board>();
+            if (difficulty == null || difficulty == "All")
+            {
+                games = db.Boards.Include("Rated")
+                    .OrderBy(x => x.Id)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+            }
+            else
+            {
+                Difficulty diff = (Difficulty)Enum.Parse(typeof(Difficulty), difficulty);
+                games = db.Boards.Include("Rated")
+                    .Where(x => x.Difficulty == diff)
+                    .OrderBy(x => x.Id)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+            }
 
-            var result = new List<IndexVM>(games.Count);
+            var result = new List<IndexVM>();
             games.ForEach(x =>
                 {
                     var current = new IndexVM();
@@ -62,12 +96,18 @@ namespace Sudoku.Controllers
                 currentUserRating = board.Rated.Single(x => x.UserProfileId == WebSecurity.CurrentUserId).RatingValue;
             }
 
+            string content = board.Content;
+            if (TempData["SavedGameContent"] != null)
+            {
+                content = TempData["SavedGameContent"].ToString();
+            }
+
             var viewModel = new PlaySudokuVM
             {
                 Id = board.Id,
-                Board = ParseBoard(board.Content),
+                Board = ParseBoard(content),
+                InitialBoard = ParseBoard(board.Content),
                 AverageRating = averageRating,
-                UserIsAuthenticated = WebSecurity.IsAuthenticated,
                 CurrentUserRating = currentUserRating
             };
 
@@ -112,6 +152,41 @@ namespace Sudoku.Controllers
             double totalRating = game.Rated.Average(x => x.RatingValue);
 
             return Json(new { rating = totalRating.ToString("0.0") }, JsonRequestBehavior.DenyGet);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult SaveGame(SaveGameVM game)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = db.UserProfiles.FirstOrDefault(x => x.UserId == WebSecurity.CurrentUserId);
+                //var gameToSave = db.SavedGames.Create();
+                //gameToSave.SavedAt = DateTime.Now;
+                //gameToSave.BoardId = game.InitialBoardId;
+                //gameToSave.Content = game.Content;
+
+                //currentUser.SavedGames.Add(gameToSave);
+
+                //db.SaveChanges();
+
+                
+
+                SavedGame savedGame = new SavedGame()
+                {
+                    BoardId = game.InitialBoardId,
+                    Content = game.Content,
+                    SavedAt = DateTime.Now,
+                };
+                currentUser.SavedGames.Add(savedGame);
+                db.SaveChanges();
+
+                return Json(true, JsonRequestBehavior.DenyGet);
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.DenyGet);
+            }
         }
 
         private static char[,] ParseBoard(string board)

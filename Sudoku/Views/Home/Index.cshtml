@@ -3,6 +3,9 @@
     ViewBag.Title = "Index";
 }
 
+@Html.Label("Difficulty", new { @for = "DifficultyList" })
+@Html.DropDownList("DifficultyList", (TempData["DifficultyList"] as IEnumerable<SelectListItem>))
+
 <div id="games" class="clear-fix">
     @Html.Partial("_Games", Model)
 </div>

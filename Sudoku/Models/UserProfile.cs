@@ -16,5 +16,6 @@ namespace Sudoku.Models
         public string UserName { get; set; }
 
         public virtual ICollection<Rating> Rated { get; set; }
+        public virtual ICollection<SavedGame> SavedGames { get; set; }
     }
 }

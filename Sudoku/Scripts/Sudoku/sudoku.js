@@ -3,7 +3,8 @@
 
     var selectDigitMenu = initMenu()
       , selectedSquare
-      , field;
+      , field
+      , boardId;
 
     field = [];
     for (var row = 0; row < 9; row++) {
@@ -14,6 +15,8 @@
     }
 
     $(document).ready(function () {
+        boardId = $("#board-id").val();
+
         $('.square').not('.modifiable').each(function (index, square) {
             var row = parseInt($(square).data('row'));
             var col = parseInt($(square).data('col'));
@@ -45,7 +48,11 @@
         });
 
         $('#send-btn').click(function (event) {
-            sendSolved($(this).data('game-id'));
+            sendSolved(boardId);
+        });
+
+        $('#save-btn').click(function (event) {
+            saveGame();
         });
 
         $('#hide-btn').click(function () {
@@ -91,25 +98,21 @@
     }
 
     function sendSolved(id) {
-        var val = "";
-        for (var row = 0; row < 9; row++)
-            for (var col = 0; col < 9; col++)
-                if (field[row][col])
-                    val += field[row][col];
+        var boardStr = getCurrentBoardAsString();
 
         var messagesWrapper = $('#messages');
 
         $.ajax({
             url: '/Home/SubmitSolution',
             type: 'post',
-            data: { Id: id, Solution: val },
+            data: { Id: id, Solution: boardStr },
             success: function (data) {
                 console.log(data);
                 if (data.IsValid) {
                     messagesWrapper.find('#message').html('Congratulations');
                     messagesWrapper.show();
                 } else {
-                    messagesWrapper.find('#message').html('Sorry, try again!');
+                    messagesWrapper.find('#message').html('Sorry, your solution was not accepted');
                     messagesWrapper.show();
                     if (data.InvalidIndices.length > 0) {
                         data.InvalidIndices.forEach(function (current) {
@@ -124,6 +127,42 @@
 
             }
         });
+    }
+
+    function saveGame() {
+        var boardStr = getCurrentBoardAsString();
+        var data = { initialBoardId: boardId, content: boardStr };
+
+        var messagesWrapper = $('#messages');
+
+        $.ajax({
+            url: '/Home/SaveGame',
+            type: 'post',
+            data: data,
+            success: function (data) {
+                if (data === true) {
+                    messagesWrapper.find('#message').html('Your game was saved successfully');
+                    messagesWrapper.show();
+                } else {
+                    messagesWrapper.find('#message').html('Your game was NOT saved.');
+                    messagesWrapper.show();
+                }
+            },
+            error: function (err) {
+                messagesWrapper.find('#message').html('There was an error with your request.');
+                messagesWrapper.show();
+            }
+        });
+    }
+
+    function getCurrentBoardAsString() {
+        var val = "";
+        for (var row = 0; row < 9; row++)
+            for (var col = 0; col < 9; col++)
+                if (field[row][col])
+                    val += field[row][col];
+
+        return val;
     }
 
 })();

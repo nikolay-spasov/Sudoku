@@ -23,5 +23,6 @@ namespace Sudoku.Models
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Board> Boards { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<SavedGame> SavedGames { get; set; }
     }
 }

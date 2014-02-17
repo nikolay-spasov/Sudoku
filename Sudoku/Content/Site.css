@@ -889,6 +889,6 @@ tr.pager td {
     margin-top: 30px;
 }
 
-.rating {
+.rating, .saved-at {
     text-align: center;
 }
