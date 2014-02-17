@@ -181,7 +181,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SimpleMembershipConfig.cs" />
-    <Compile Include="App_Start\SudokuDataConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -308,7 +307,9 @@
     <Content Include="Scripts\Sudoku\gameList.js" />
     <Content Include="Scripts\Sudoku\loadGame.js" />
     <Content Include="Scripts\Sudoku\sudoku.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

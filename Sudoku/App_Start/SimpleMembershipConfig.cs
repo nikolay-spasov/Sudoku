@@ -5,8 +5,11 @@ namespace Sudoku.App_Start
     {
         public static void Initialize()
         {
-            WebSecurity.InitializeDatabaseConnection("DefaultConnection", 
-                "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            if (!WebSecurity.Initialized)
+            {
+                WebSecurity.InitializeDatabaseConnection("DefaultConnection",
+                    "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            }
         }
     }
 }
