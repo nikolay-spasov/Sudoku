@@ -19,7 +19,7 @@ namespace Sudoku
         {
             AreaRegistration.RegisterAllAreas();
 
-            SimpleMembershipConfig.Initialize();
+            WebSecurityInitializer.Instance.EnsureInitialize();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
