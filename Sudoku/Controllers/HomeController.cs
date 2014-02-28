@@ -93,7 +93,7 @@ namespace Sudoku.Controllers
             int currentUserRating = 0;
             if (WebSecurity.IsAuthenticated && board.Rated.Any(x => x.UserProfileId == WebSecurity.CurrentUserId))
             {
-                currentUserRating = board.Rated.Single(x => x.UserProfileId == WebSecurity.CurrentUserId).RatingValue;
+                currentUserRating = board.Rated.FirstOrDefault(x => x.UserProfileId == WebSecurity.CurrentUserId).RatingValue;
             }
 
             string content = board.Content;
@@ -135,7 +135,7 @@ namespace Sudoku.Controllers
 
             if (game.Rated.Any(x => x.UserProfileId == WebSecurity.CurrentUserId))
             {
-                game.Rated.Single(x => x.UserProfileId == WebSecurity.CurrentUserId).RatingValue = ratingValue;
+                game.Rated.FirstOrDefault(x => x.UserProfileId == WebSecurity.CurrentUserId).RatingValue = ratingValue;
                 db.SaveChanges();
             }
             else
