@@ -109,10 +109,10 @@
             success: function (data) {
                 console.log(data);
                 if (data.IsValid) {
-                    messagesWrapper.find('#message').html('Congratulations');
+                    messagesWrapper.find('#message').html('Congratulations! You solved puzzle #' + id);
                     messagesWrapper.show();
                 } else {
-                    messagesWrapper.find('#message').html('Sorry, your solution was not accepted');
+                    messagesWrapper.find('#message').html('Sorry, your solution is not valid.');
                     messagesWrapper.show();
                     if (data.InvalidIndices.length > 0) {
                         data.InvalidIndices.forEach(function (current) {
@@ -122,9 +122,6 @@
                         });
                     }
                 }
-            },
-            error: function (err) {
-
             }
         });
     }

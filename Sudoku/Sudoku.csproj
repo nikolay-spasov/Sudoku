@@ -216,6 +216,10 @@
     <Compile Include="Migrations\201402131038483_fixedUserProfileSavedGamesRelationship.Designer.cs">
       <DependentUpon>201402131038483_fixedUserProfileSavedGamesRelationship.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404220911033_fixedRatingsTable.cs" />
+    <Compile Include="Migrations\201404220911033_fixedRatingsTable.Designer.cs">
+      <DependentUpon>201404220911033_fixedRatingsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Board.cs" />
@@ -378,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201402131038483_fixedUserProfileSavedGamesRelationship.resx">
       <DependentUpon>201402131038483_fixedUserProfileSavedGamesRelationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404220911033_fixedRatingsTable.resx">
+      <DependentUpon>201404220911033_fixedRatingsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
